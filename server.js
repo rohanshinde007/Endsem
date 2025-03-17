@@ -9,6 +9,7 @@ const path = require('path');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+// app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
@@ -42,11 +43,17 @@ app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const sql = 'SELECT * FROM users WHERE username = ? AND password = ?';
     db.query(sql, [username, password], (err, results) => {
-        if (err) return res.json({ success: false, message: 'Login failed' });
+        if (err) {
+            // console.error('Database query error:', err);
+            return res.json({ success: false, message: 'Login failed' });
+        }
+        // console.log('Query results:', results);
         if (results.length > 0) {
-            res.redirect('http://127.0.0.1:5502/home.html');
+            res.json({ success: true, message: 'Login successful' });
+            // res.redirect('http://127.0.0.1:5502/home.html');
         } else {
             res.json({ success: false, message: 'Invalid credentials' });
+            console.log('Invalid credentials');
         }
     });
 });
