@@ -38,7 +38,8 @@ app.post('/login', (req, res) => {
     db.query(sql, [username, password], (err, results) => {
         if (err) return res.json({ success: false, message: 'Login failed' });
         if (results.length > 0) {
-            res.json({ success: true, message: 'Login successful' });
+            // res.json({ success: true, message: 'Login successful' });
+            res.redirect('http://127.0.0.1:5502/home.html');
         } else {
             res.json({ success: false, message: 'Invalid credentials' });
         }
