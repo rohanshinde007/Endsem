@@ -25,6 +25,12 @@ db.connect(err => {
 
 app.post('/register', (req, res) => {
     const { username, password, email, phone } = req.body;
+
+    // Validate phone number length
+    if (phone.length !== 10) {
+        return res.send('Phone number must be 10 digits long');
+    }
+
     const sql = 'INSERT INTO users (username, password, email, phone) VALUES (?, ?, ?, ?)';
     db.query(sql, [username, password, email, phone], (err, result) => {
         if (err) return res.send('Registration failed');
@@ -38,14 +44,12 @@ app.post('/login', (req, res) => {
     db.query(sql, [username, password], (err, results) => {
         if (err) return res.json({ success: false, message: 'Login failed' });
         if (results.length > 0) {
-            // res.json({ success: true, message: 'Login successful' });
             res.redirect('http://127.0.0.1:5502/home.html');
         } else {
             res.json({ success: false, message: 'Invalid credentials' });
         }
     });
 });
-
 
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');

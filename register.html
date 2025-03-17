@@ -23,7 +23,10 @@
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <input type="email" name="email" placeholder="Email" required>
-        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <input type="tel" pattern="[789]\d{9,9}$" maxlength="10" name="phone" placeholder="Phone Number" title="Please enter valid phone number" required>
+
+        <!-- this pattern is for indian phone numbers only which is start with 7,8,9 and have 10 digits I get this pattern from stackoverflow -->
+
         <button type="submit">Register</button>
     </form>
     <div class="login-link">
