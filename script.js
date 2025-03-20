@@ -109,7 +109,7 @@ let selectedGenre = [];
 setGenre();
 function setGenre() {
 	tagsEl.innerHTML = "";
-	genres.forEach((genre) => {
+	genres.slice(0, 5).forEach((genre) => { // Limit to first 5 genres
 		const t = document.createElement("div");
 		t.classList.add("tag");
 		t.id = genre.id;
@@ -153,18 +153,7 @@ function highlightSelection() {
 function clearBtn() {
 	let clearBtn = document.getElementById("clear");
 	if (clearBtn) {
-		clearBtn.classList.add("highlight");
-	} else {
-		let clear = document.createElement("div");
-		clear.classList.add("tag", "highlight");
-		clear.id = "clear";
-		clear.innerText = "Clear x";
-		clear.addEventListener("click", () => {
-			selectedGenre = [];
-			setGenre();
-			getMovies(API_URL);
-		});
-		tagsEl.append(clear);
+		clearBtn.remove(); // Remove the clear button if it exists
 	}
 }
 
@@ -226,7 +215,6 @@ function showMovies(data) {
 
                 <h3>Overview</h3>
                 ${overview}
-                <br/> 
                 <button class="know-more" id="${id}">Know More</button
             </div>
         
@@ -245,46 +233,20 @@ const overlayContent = document.getElementById("overlay-content");
 /* Open when someone clicks on the span element */
 function openNav(movie) {
 	let id = movie.id;
-	fetch(BASE_URL + "/movie/" + id + "/videos?" + API_KEY)
+	fetch(`${BASE_URL}/movie/${id}/videos?${API_KEY}`)
 		.then((res) => res.json())
 		.then((videoData) => {
-			console.log(videoData);
-			if (videoData) {
-				document.getElementById("myNav").style.width = "100%";
-				if (videoData.results.length > 0) {
-					let embed = [];
-					let dots = [];
-					videoData.results.forEach((video, idx) => {
-						let { name, key, site } = video;
-
-						if (site == "YouTube") {
-							embed.push(`
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" title="${name}" class="embed hide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          
-          `);
-
-							dots.push(`
-              <span class="dot">${idx + 1}</span>
-            `);
-						}
-					});
-
-					let content = `
-        <h1 class="no-results">${movie.original_title}</h1>
-        <br/>
-        
-        ${embed.join("")}
-        <br/>
-
-        <div class="dots">${dots.join("")}</div>
-        
-        `;
-					overlayContent.innerHTML = content;
-					activeSlide = 0;
-					showVideos();
+			if (videoData.results.length > 0) {
+				const video = videoData.results.find(video => video.site === "YouTube");
+				if (video) {
+					const { key } = video;
+					// Redirect to video.html with movie id and video key as query parameters
+					window.location.href = `video.html?id=${id}&key=${key}`;
 				} else {
-					overlayContent.innerHTML = `<h1 class="no-results">No Results Found</h1>`;
+					alert("No Trailer Found");
 				}
+			} else {
+				alert("No Trailer Found");
 			}
 		});
 }
@@ -393,4 +355,6 @@ function pageCall(page) {
 		let url = urlSplit[0] + "?" + b;
 		getMovies(url);
 	}
+	// Prevent scrolling to the top of the page
+	window.scrollTo({ top: 0, behavior: "smooth" });
 }

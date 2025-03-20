@@ -1,0 +1,20 @@
+:root {
+	--primary-color: #0b0b0d;
+	--secondary-color: #724808;
+}
+
+body {
+	height: 100%;
+	/* background-color: var(--primary-color); */
+	/* background: linear-gradient(
+        45deg,
+        var(--primary-color),
+        var(--secondary-color)
+    ); */
+    background: url('https://images.pexels.com/photos/274937/pexels-photo-274937.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
+	font-family: "Poppins", sans-serif;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position: relative;
+}

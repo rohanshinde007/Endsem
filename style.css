@@ -383,3 +383,18 @@ main {
     width: 100%;
   }
 }
+
+.back-button {
+	display: inline-block;
+	margin: 20px;
+	padding: 10px 20px;
+	background-color: var(--primary-color);
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.back-button:hover {
+	background-color: var(--secondary-color);
+}
